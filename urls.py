@@ -5,5 +5,5 @@ from search import handlers as search_handlers
 
 
 handlers = [
-    
+    (r'/search/web/?', search_handlers.WebSearchHandler),
 ]

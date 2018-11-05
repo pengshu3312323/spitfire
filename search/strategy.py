@@ -3,20 +3,19 @@
 
 
 class KeywordsOperate:
-    def __init__(self, search_target):
+    def __init__(self, keywords, search_target):
         self.search_target = search_target
+        self.keywords = keywords
 
     def words_split(self):
-        return WordsSplit.do_nothing()
-
-    def gen_url(self):
-        pass
+        return WordsSplit.symbol_split(self.keywords)
 
 
 class WordsSplit:
     @staticmethod
     def symbol_split(keywords):
-        pass
+        # 目前只按空格来分段
+        return keywords.split(' ')
 
     @staticmethod
     def smart_split(keywords):
