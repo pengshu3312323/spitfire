@@ -3,6 +3,7 @@
 
 
 class BaseItemFactory:
-    def new_item(self, name, money, member_list):
-        # TODO
-        return 'item'
+    def new_item(self, name, cost, member_list):
+        from .func import AaItem
+        item = AaItem(name, cost, member_list)
+        return item

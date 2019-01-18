@@ -30,8 +30,8 @@ class AaAcount(AccountAbstract):
                 print(m)
 
     # 消费项目处理
-    def create_item(self, name, money, member_list, operator):
-        item = self._item_factory.new_item(name, money, member_list)
+    def create_item(self, name, cost, member_list, operator=None):
+        item = self._item_factory.new_item(name, cost, member_list)
         self._item_list.append(item)
         self._total_money_update(item)
 
@@ -47,4 +47,6 @@ class AaItem(ItemAbstract):
     '''
     好朋友一起玩的东西
     '''
-    pass
+    def split_cost(self):
+        for member in self.member_list:
+            member.add_item(self)

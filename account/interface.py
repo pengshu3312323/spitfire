@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding:utf-8 -*-
 
+import collections
+import datetime
 from abc import ABCMeta, abstractmethod
 from decimal import Decimal, getcontext
 
@@ -91,7 +93,7 @@ class AccountAbstract(metaclass=ABCMeta):
         self._average_money = self._total_money / self._member_num
         return str(self._average_money)
 
-    # 账目内成员处理
+    # 账目内成员处理 抽象
     @abstractmethod
     def member_register(self, member):
         pass
@@ -110,7 +112,7 @@ class AccountAbstract(metaclass=ABCMeta):
             for m in self._member_list:
                 print(m)
 
-    # 消费项目处理
+    # 消费项目处理 抽象
     @abstractmethod
     def create_item(self, name, money, member_list, operator):
         pass
@@ -120,51 +122,50 @@ class MemberAbstract(metaclass=ABCMeta):
     '''
     分账成员基类
     '''
-    @abstractmethod
     def __init__(self, name):
         self.name = name
 
-        self._cost = Decimal('0.00')
-        self._item_list = list()
+        self.__cost = Decimal('0.00')
+        self.__item_list = list()
 
     # 单个成员总账目
     @property
     def cost(self):
-        return self._cost
+        return str(self.__cost)
 
     @cost.setter
     def cost(self, cost):
         print('不能直接修改金额!')
         return 0
 
-    def _cost_add(self, item_aver_money):
+    def _cost_add(self, item_aver_cost):
         try:
-            item_aver_money = str(item_aver_money)
+            item_aver_cost = str(item_aver_cost)
         except Exception:
-            raise TypeError('Money must be a str')
+            raise TypeError('aver_cost must be a str')
 
-        self._cost += item_aver_money
+        self.__cost += Decimal(item_aver_cost)
 
-    def _cost_reduce(self, item_aver_money):
+    def _cost_reduce(self, item_aver_cost):
         try:
-            item_aver_money = str(item_aver_money)
+            item_aver_cost = str(item_aver_cost)
         except Exception:
-            raise TypeError('Money must be a str')
+            raise TypeError('aver_cost must be a str')
 
-        self._cost -= item_aver_money
+        self.__cost -= Decimal(item_aver_cost)
 
     # 单个成员所参与的项目列表
     def add_item(self, item):
-        self._item_list.append(item)
-        self._cost_add(item.aver_money)
+        self.__item_list.append(item)
+        self._cost_add(item.aver_cost)
 
     def remove_item(self, item):
-        if item in self._item_list:
-            self._item_list.remove(item)
-            self._cost_reduce(item.aver_money)
+        if item in self.__item_list:
+            self.__item_list.remove(item)
+            self._cost_reduce(item.aver_cost)
 
     def display_item(self):
-        if self._item_list:
+        if self.__item_list:
             pass
         else:
             return '还没有消费项目'
@@ -174,4 +175,50 @@ class ItemAbstract(metaclass=ABCMeta):
     '''
     消费项目基类
     '''
-    pass
+    def __init__(self, name, cost, member_list):
+        if not isinstance(member_list, collections.Iterable):
+            raise TypeError('member_list must be iterable')
+        try:
+            cost = str(cost)
+        except Exception:
+            raise TypeError('cost must be a str')
+
+        self.__name = name
+        self.__cost = Decimal(cost)
+        self.__member_list = member_list
+        self.__member_num = len(self.__member_list)
+        self._get_average_cost()
+        self.__time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    def _get_average_cost(self):
+        self.__aver_cost = self.__cost / self.__member_num
+        return round(self.__aver_cost)
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        pass
+
+    @property
+    def cost(self):
+        return str(self.__cost)
+
+    @property
+    def aver_cost(self):
+        return round(self.__aver_cost)
+
+    @property
+    def member_num(self):
+        return self.__member_num
+
+    @property
+    def member_list(self):
+        return self.__member_list
+
+    @abstractmethod
+    def split_cost(self):
+        # 分账
+        pass
