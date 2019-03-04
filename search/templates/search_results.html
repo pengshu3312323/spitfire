@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="author" content="Pencil">
+    <link rel="shortcut icon" href="http://meetpencil.tk/static/images/favicon.ico">
+    <style>
+        html,body {
+            height: 100%; 
+            overflow:hidden;
+        }
+
+        body {
+            margin:0;
+            padding:0; 
+            list-style:none;
+        }
+    </style>
+    <title>搜索结果</title>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid" id="jumbotron">
+        <div class="container" id="header">
+            <nav class="navbar navbar-inverse">
+                <div class="nav navbar-left">
+                    <a class="navbar-brand mb-0 h1" href="http://meetpencil.tk/">返回首页</a>
+                </div>
+            </nav>
+        </div>
+        <div class="results">
+            {% if res['success'] %}
+                <ul class="result">
+                    {% for i in res['data'] %}
+                        <li>
+                            <div class="title">
+                                <a href="{{ i['source'] }}"><h3>{{ i['title'] }}</h3></a>
+                            </div>
+                            <div class="des">
+                                {{ i['des'] }}
+                            </div>
+                        </li>
+                    {% end %}
+                </ul>
+                <div class='page'>
+                    <p>当前页：{{ res['data'][0]['page_num'] + 1 }}</p>
+                </div>
+            {% else %}
+                <div>
+                    <p>{{ res['msg'] }}</p>
+                </div>
+            {% end %}
+        </div>
+    </div>          
+</body>
+</html>
