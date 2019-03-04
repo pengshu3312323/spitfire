@@ -35,7 +35,7 @@ class GoogleSearchClient:
     def __init__(self):
         self.client = SearchClient()
 
-    # @cache_control(100)
+    @cache_control(100)
     def search(self, keyword, pn):
         res = {
             'success': False,

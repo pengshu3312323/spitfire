@@ -16,11 +16,11 @@ if DEBUG:
     REDIS = {
       'host': 'localhost',
       'port': 6879,
-      'password': 'password',
+      'password': 'hummel165',
     }
 else:
     REDIS = {
-        'host': 'host',
+        'host': '172.17.0.1',
         'port': 6879,
-        'password': 'password',
+        'password': 'hummel165',
     }
