@@ -25,9 +25,5 @@ class SearchAbstract(metaclass=ABCMeta):
         self._search_target = value
 
     @abstractmethod
-    def gen_url(self):
-        pass
-
-    @abstractmethod
     def keywords_handle(self):
         pass
