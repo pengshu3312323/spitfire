@@ -63,7 +63,7 @@ class GoogleSearch(SearchAbstract):
         logger.debug(keywords + ':' + str(pn))
         self.keywords = keywords
         try:
-            pn = int(pn) if pn > 0 else 0
+            pn = int(pn) if int(pn) > 0 else 0
         except Exception:
             pn = 0
 
