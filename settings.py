@@ -14,13 +14,13 @@ LOG_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 # redis
 if DEBUG:
     REDIS = {
-      'host': 'localhost',
+      'host': 'host',
       'port': 6879,
-      'password': 'hummel165',
+      'password': 'password',
     }
 else:
     REDIS = {
-        'host': '172.17.0.1',
+        'host': 'host',
         'port': 6879,
-        'password': 'hummel165',
+        'password': 'password',
     }
