@@ -1,6 +1,8 @@
 #! /usr/bin/env python3
 # -*- coding:utf-8 -*-
 import json
+import time
+import asyncio
 
 from throttle.throttle.client import SearchClient
 from cache import cache_control
@@ -42,8 +44,13 @@ class GoogleSearchClient:
             'msg': '',
             'data': None,
         }
+        # logger.debug('client' + keyword + ':' + str(pn))
         try:
+            # loop = asyncio.get_event_loop()
+            # self.client为RPC 客户端，需要求缓存也异步
+            # future = loop.run_in_executor(None, self.client.send, keyword, pn)
             data = self.client.send(keyword, pn)
+            # pass
         except Exception as e:
             logger.error(e, exc_info=True)
             data = 0
@@ -54,3 +61,20 @@ class GoogleSearchClient:
         else:
             res = data
         return res
+
+    def block(self, keyword, pn):
+        time.sleep(3)
+        print(keyword, pn)
+        return {
+            'success': True,
+            'data': [
+                {
+                    "search_type": "g",
+                    "keyword": "google",
+                    "page_num": 1,
+                    "title": "Google",
+                    "source": "http://www.google.cn/",
+                    "des": "<span class=\"st\">Search the world's information, including webpages, images, videos and more. <em>Google</em> has many special features to help you find exactly what you're looking ...</span>"
+                },
+            ],
+        }

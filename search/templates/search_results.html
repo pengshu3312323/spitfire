@@ -18,10 +18,11 @@
             list-style:none;
         }
     </style>
+    {% autoescape None %}
     <title>搜索结果</title>
 </head>
 <body>
-    <div class="jumbotron jumbotron-fluid" id="jumbotron">
+    <div class="jumbotron jumbotron-fluid" align="center">
         <div class="container" id="header">
             <nav class="navbar navbar-inverse">
                 <div class="nav navbar-left">
@@ -31,27 +32,33 @@
         </div>
         <div class="results">
             {% if res['success'] %}
-                <ul class="result">
-                    {% for i in res['data'] %}
-                        <li>
-                            <div class="title">
-                                <a href="{{ i['source'] }}"><h3>{{ i['title'] }}</h3></a>
-                            </div>
-                            <div class="des">
-                                {{ i['des'] }}
-                            </div>
-                        </li>
-                    {% end %}
-                </ul>
+                <div align="left" style="overflow:scroll; width:1000px; height:600px;">
+                    <ul class="result">
+                            {% for i in res['data'] %}
+                                <li>
+                                    <div class="title">
+                                        <a href="{{ i['source'] }}"><h3>{{ i['title'] }}</h3></a>
+                                    </div>
+                                    <div class="des">
+                                        {{ i['des'] }}
+                                    </div>
+                                </li>
+                            {% end %}
+                    </ul>
+                </div>
+                
                 <div class='page'>
-                    <p>当前页：{{ res['data'][0]['page_num'] + 1 }}</p>
+                    <span>当前页：{{ res['data'][0]['page_num'] + 1 }}</span>
+                    {% if res['data'][0]['page_num'] != 0 %}
+                        <p><a href="/search/google/?keywords={{ res['data'][0]['keyword'] }}&page_num={{ res['data'][0]['page_num'] - 1 }}">Pre</a></p>
+                    {% end if %}
+                    <p><a href="/search/google/?keywords={{ res['data'][0]['keyword'] }}&page_num={{ res['data'][0]['page_num'] + 1 }}">Next</a></p>
                 </div>
             {% else %}
                 <div>
                     <p>{{ res['msg'] }}</p>
                 </div>
             {% end %}
-        </div>
-    </div>          
+        </div>          
 </body>
 </html>

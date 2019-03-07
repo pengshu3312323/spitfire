@@ -17,20 +17,33 @@ class WebSearchHandler(RequestHandler):
 
 class GoogleSearchHandler(RequestHandler):
     def get(self):
-        keywords = self.get_argument('keywords')
-        page_num = self.get_argument('page_num')
+        keywords = self.get_argument('keywords', default=None)
+        page_num = self.get_argument('page_num', default=0)
+        json = self.get_argument('json', default=None)
+
+        if not keywords:
+            self.send_error(400)
+
         google_search = GoogleSearch()
         res = google_search.get_search_result(keywords, page_num)
         '''
         res = {
             'success': True,
-            'msg': 'Sorry,出现故障了',
+            # 'msg': 'Sorry,出现故障了',
             'data': [
-                {"search_type": "g", "keyword": "python", "page_num": 0, "title": "Python 1", "source": "http://www.runoob.com/python/python-intro.html", "des": "<div><span>这是详情<em>1<em></span></div>"},
-                {"search_type": "g", "keyword": "python", "page_num": 0, "title": "Python 2", "source": "http://www.runoob.com/python/python-intro.html", "des": "<div><span>这是详情<em>2<em></span></div>"},
+                {
+                    "search_type": "g",
+                    "keyword": "google",
+                    "page_num": 1,
+                    "title": "Google",
+                    "source": "http://www.google.cn/",
+                    "des": "<span class=\"st\">Search the world's information, including webpages, images, videos and more. <em>Google</em> has many special features to help you find exactly what you're looking ...</span>"
+                },
             ]
         }
         '''
-        self.set_header('Content-Type', 'application/json;charset=utf-8')
-        self.write(res)
-        # self.render('templates/search_results.html', res=res)
+        if json is not None:
+            self.set_header('Content-Type', 'application/json;charset=utf-8')
+            self.write(res)
+        else:
+            self.render('templates/search_results.html', res=res)
